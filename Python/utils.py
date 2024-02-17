@@ -34,7 +34,7 @@ class Tile:
 
 
 class Board:
-    def __init__(self, board:list[list[Tile]], size:tuple[int, int], numBombs:int, locBomb:int):
+    def __init__(self, board:list[list[Tile]], size:tuple[int, int], numBombs:int, locBomb:list[int]):
         self.board = board
         self.size = size
         self.numBombs = numBombs
@@ -42,7 +42,7 @@ class Board:
     
     openedTiles = 0
     numFlags = 0
-    lose = 0
+    lose = False
             
     
     def getSize(self):
@@ -74,9 +74,9 @@ class Board:
         self.openedTiles += 1
     
     def isComplete(self):
-        if self.lose():
+        if self.lose:
             return True
-        if self.openedTiles == (self.numTiles - self.numBombs):
+        if self.openedTiles == (self.getNumTiles() - self.numBombs):
             return True
         if self.numFlags == self.numBombs:
             return all(self.getTile(bomb).isFlag() for bomb in self.locBomb)
@@ -87,7 +87,9 @@ class Board:
         return self.lose()
     
     def setLose(self):
-        self.lose = 1
+        self.lose = True
+        
+        
 
 def surround(func, game, loc):
     row, col = loc

@@ -1,5 +1,5 @@
 import create_board
-from utils import surround
+from utils import *
 
 DEBUG = 0
 
@@ -84,31 +84,30 @@ def nextMove(game:create_board.Board):
     print("Next Turn")
     action, loc = play_turn(game)
     tile = game.getTile(loc)
-    
+
     # Check if already opened
     if tile.getOpened():
         # Do nothing
         return game
-    
+
     # Check if Bomb -> Set lose to 1 -> Reveal board
     if action == "O" and tile.isBomb():
         game.setLose()
         return game
-    
+
     if action == "O":
         if tile.isFlag():
             ## Do nothing
             return game
         game = revealTile(game, loc)
         return game
-    
+
     if action == "F":
         if tile.isFlag():
             game.numFlags -= 1
-            tile.toggleFlag()
         else:
             game.numFlags += 1
-            tile.toggleFlag()
+        tile.toggleFlag()
         return game
 
 
