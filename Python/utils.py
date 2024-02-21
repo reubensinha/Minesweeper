@@ -1,93 +1,99 @@
 class Tile:
-    __value = 0
-    __opened = False
-    __flag = False
+    _value = 0
+    _opened = False
+    _flag = False
         
     def getValue(self):
-        return self.__value
+        return self._value
     
     def getOpened(self):
-        return self.__opened
+        return self._opened
     
     def setValue(self, value):
-        self.__value = value
+        self._value = value
     
     def open(self):
-        self.__opened = True
+        self._opened = True
     
     def toggleFlag(self):
-        self.__flag = not self.__flag
+        self._flag = not self._flag
     
     def isBomb(self):
-        return self.__value == -1
+        return self._value == -1
     
     def isEmpty(self):
-        return self.__value == 0
+        return self._value == 0
     
     def isFlag(self):
-        return self.__flag
+        return self._flag
     
     def reset(self):
-        self.__flag = False
-        self.__opened = False
+        self._flag = False
+        self._opened = False
 
 
 
 class Board:
     def __init__(self, board:list[list[Tile]], size:tuple[int, int], numBombs:int, locBomb:list[int]):
-        self.board = board
-        self.size = size
-        self.numBombs = numBombs
-        self.locBomb = locBomb
+        self._board = board
+        self._size = size
+        self._numBombs = numBombs
+        self._locBomb = locBomb
     
-    openedTiles = 0
-    numFlags = 0
-    lose = False
+    _openedTiles = 0
+    _numFlags = 0
+    _lose = False
             
     
     def getSize(self):
-        return self.size
+        return self._size
     
     def getNumRow(self):
-        return self.size[0]
+        return self._size[0]
     
     def getNumCol(self):
-        return self.size[1]
+        return self._size[1]
     
     def getBoard(self):
-        return self.board
+        return self._board
     
     def getNumBombs(self):
-        return self.numBombs
+        return self._numBombs
     
     def getOpenedTiles(self):
-        return self.openedTiles
+        return self._openedTiles
     
     def getNumTiles(self):
-        return self.size[0] * self.size[1]
+        return self._size[0] * self._size[1]
 
     def getTile(self, loc) -> Tile:
         row, col = loc
-        return self.board[row][col]
+        return self._board[row][col]
     
     def incOpenedTiles(self):
-        self.openedTiles += 1
+        self._openedTiles += 1
     
     def isComplete(self):
-        if self.lose:
+        if self._lose:
             return True
-        if self.openedTiles == (self.getNumTiles() - self.numBombs):
+        if self._openedTiles == (self.getNumTiles() - self._numBombs):
             return True
-        if self.numFlags == self.numBombs:
-            return all(self.getTile(bomb).isFlag() for bomb in self.locBomb)
+        if self._numFlags == self._numBombs:
+            return all(self.getTile(bomb).isFlag() for bomb in self._locBomb)
         else:
             return False
     
     def getLose(self):
-        return self.lose()
+        return self._lose()
     
     def setLose(self):
-        self.lose = True
+        self._lose = True
+        
+    def incFlag(self):
+        self._numFlags += 1
+    
+    def decFlag(self):
+        self._numFlags -= 1
         
         
 

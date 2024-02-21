@@ -104,9 +104,9 @@ def nextMove(game:create_board.Board):
 
     if action == "F":
         if tile.isFlag():
-            game.numFlags -= 1
+            game.decFlag()
         else:
-            game.numFlags += 1
+            game.incFlag()
         tile.toggleFlag()
         return game
 
@@ -114,7 +114,7 @@ def nextMove(game:create_board.Board):
 def endGame(game:create_board.Board):
     # TODO
     create_board.displayMines(game)
-    if game.lose:
+    if game.getLose():
         print("You Lose")
     else:
         print("You Win!")
@@ -126,7 +126,7 @@ def main():
         displayBoard(game)
         game = nextMove(game)
         if DEBUG:
-            print(f"lose = {game.lose}")
+            print(f"lose = {game.getLose()}")
             print(f"isComplete = {game.isComplete()}")
         complete = game.isComplete()
     endGame(game)
