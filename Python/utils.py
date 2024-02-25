@@ -34,11 +34,10 @@ class Tile:
 
 
 class Board:
-    def __init__(self, board:list[list[Tile]], size:tuple[int, int], numBombs:int, locBomb:list[int]):
+    def __init__(self, board:list[list[Tile]], size:tuple[int, int], numBombs:int):
         self._board = board
         self._size = size
         self._numBombs = numBombs
-        self._locBomb = locBomb
     
     _openedTiles = 0
     _numFlags = 0
@@ -97,16 +96,16 @@ class Board:
         
         
 
-def surround(func, game, loc):
+def surround(func, board, loc):
     row, col = loc
     
-    game = func(game, (row-1, col))
-    game = func(game, (row-1, col+1))
-    game = func(game, (row-1, col-1))
-    game = func(game, (row, col+1))
-    game = func(game, (row, col-1))
-    game = func(game, (row+1, col+1))
-    game = func(game, (row+1, col))
-    game = func(game, (row+1, col-1))
+    board = func(board, (row-1, col-1)) # Top-Left Corner
+    board = func(board, (row-1, col))   # Top edge
+    board = func(board, (row-1, col+1)) # Top-Right Corner
+    board = func(board, (row, col-1))   # Left Edge
+    board = func(board, (row, col+1))   # Right Edge
+    board = func(board, (row+1, col-1)) # Bottom-Left Corner
+    board = func(board, (row+1, col))   # Bottom Edge
+    board = func(board, (row+1, col+1)) # Bottom-Right Corner
     
-    return game
+    return board
