@@ -3,7 +3,7 @@ from utils import *
 
 DEBUG = 0
 
-def displayBoard(game:"create_board.Board"):
+def displayBoard(game:Board):
     for i, row in enumerate(game.getBoard()):
         if i==0:
             print("\n" + "+---"*(len(row)-1) + "+---+", sep="")
@@ -13,9 +13,9 @@ def displayBoard(game:"create_board.Board"):
             
             if col.isFlag():
                 print(" F |", end="") 
-            elif not col.getOpened():
+            elif not col.isOpened():
                 print(" O |", end="")
-            elif col.getOpened():
+            elif col.isOpened():
                 if col.isBomb():
                     print(" x |", end="")
                 elif col.isEmpty():
@@ -28,8 +28,8 @@ def displayBoard(game:"create_board.Board"):
         print("\n" + "+---"*(len(row)-1) + "+---+", sep="")
 
 
-def play_turn(game:create_board.Board):
-    # TODO Placeholder
+def play_turn(game:Board):
+    # TODO Placeholder for GUI
     notInt = True
     wrongArgNum = True
     while notInt or wrongArgNum:
@@ -53,12 +53,12 @@ def play_turn(game:create_board.Board):
     return action, (row, col)
 
 
-def revealTile(game:create_board.Board, loc):
+def revealTile(game:Board, loc):
     row, col = loc
     if row < 0 or row >= game.getNumRow() or col < 0 or col >= game.getNumCol():
         return game
     
-    if game.getTile(loc).getOpened():
+    if game.getTile(loc).isOpened():
         return game
     
     game.incOpenedTiles()
@@ -67,26 +67,17 @@ def revealTile(game:create_board.Board, loc):
         # TODO cleanup
         return game
     
-    # game = revealTile(game, (row-1, col-1))
-    # game = revealTile(game, (row-1, col))
-    # game = revealTile(game, (row-1, col+1))
-    # game = revealTile(game, (row, col+1))
-    # game = revealTile(game, (row, col-1))
-    # game = revealTile(game, (row+1, col+1))
-    # game = revealTile(game, (row+1, col))
-    # game = revealTile(game, (row+1, col-1))
     game = surround(revealTile, game, loc)
     
     return game
 
 
-def nextMove(game:create_board.Board):
+def nextMove(game:Board):
     print("Next Turn")
     action, loc = play_turn(game)
     tile = game.getTile(loc)
 
-    # Check if already opened
-    if tile.getOpened():
+    if tile.isOpened():
         # Do nothing
         return game
 
@@ -107,12 +98,12 @@ def nextMove(game:create_board.Board):
             game.decFlag()
         else:
             game.incFlag()
+            
         tile.toggleFlag()
         return game
 
 
-def endGame(game:create_board.Board):
-    # TODO
+def endGame(game:Board):
     create_board.displayMines(game)
     if game.getLose():
         print("You Lose")
@@ -125,9 +116,6 @@ def main():
     while not complete:
         displayBoard(game)
         game = nextMove(game)
-        if DEBUG:
-            print(f"lose = {game.getLose()}")
-            print(f"isComplete = {game.isComplete()}")
         complete = game.isComplete()
     endGame(game)
 

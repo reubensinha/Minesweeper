@@ -6,7 +6,7 @@ class Tile:
     def getValue(self):
         return self._value
     
-    def getOpened(self):
+    def isOpened(self):
         return self._opened
     
     def setValue(self, value):
